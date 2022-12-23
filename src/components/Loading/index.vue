@@ -11,9 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-  // @typescript-eslint/no-unused-vars
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const props = defineProps({
+  defineProps({
     /**
      * 是否加载中状态
      */

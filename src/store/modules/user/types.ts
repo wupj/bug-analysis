@@ -1,4 +1,4 @@
-export type RoleType = '' | '*' | 'demdev' | 'user'
+export type RoleType = '' | '*' | 'develop' | 'user'
 export interface UserState {
   name?: string
   avatar?: string

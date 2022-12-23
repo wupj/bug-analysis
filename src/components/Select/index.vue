@@ -30,18 +30,24 @@
 
 <script setup lang="ts">
   import { PropType } from 'vue'
-  import { SelectOptionData, SelectOptionValue } from '@arco-design/web-vue/es/select/interface'
+  import { SelectOptionData, SelectOptionValue } from '@arco-design/web-vue/es/select/interface.d'
 
-  const props = defineProps({
-    /** 加载图标 */
+  defineProps({
+    /**
+     * 加载图标
+     */
     loadingIcon: {
       type: String,
     },
-    /** 搜索的icon图标 */
+    /**
+     * 搜索的icon图标
+     */
     searchIcon: {
       type: String,
     },
-    /** 自定义 SelectOptionData 中的字段 */
+    /**
+     * 自定义 SelectOptionData 中的字段
+     */
     fieldNames: {
       type: Object,
       default: () => {
@@ -51,17 +57,23 @@
         }
       },
     },
-    /** 是否开启多选 */
+    /**
+     * 自定义 是否开启多选 中的字段
+     */
     multiple: {
       type: Boolean,
       default: false,
     },
-    /** 默认的值 */
+    /**
+     * 默认的值
+     */
     defaultVal: {
       type: String as PropType<SelectOptionValue>,
       default: '',
     },
-    /** 选中的值 */
+    /**
+     * 选中的值
+     */
     selectVal: {
       type: String,
       default: undefined,

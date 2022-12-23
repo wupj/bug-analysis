@@ -84,14 +84,14 @@
   import { useAppStore, useUserStore } from '@/store'
   import { LOCALE_OPTIONS } from '@/locale'
   import useLocale from '@/hooks/locale'
-  // import useUser from '@/hooks/user'
+  import useUser from '@/hooks/user'
   import { useRouter } from 'vue-router'
 
   const appStore = useAppStore()
   const userStore = useUserStore()
   const router = useRouter()
   const { t } = useI18n()
-  // const { logout } = useUser()
+  const { logout } = useUser()
   const { changeLocale } = useLocale()
   const locales = [...LOCALE_OPTIONS]
 
@@ -113,12 +113,11 @@
   const triggerBtn = ref()
 
   const handleLogout = () => {
-    localStorage.clear()
     Message.success(t('navbar.logoutSucceed'))
     router.push({
       name: 'login',
     })
-    // logout()
+    logout()
   }
   const setDropDownVisible = () => {
     const event = new MouseEvent('click', {

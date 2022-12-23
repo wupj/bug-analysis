@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
   import { computed } from 'vue'
-  import { TableData } from '@arco-design/web-vue/es/table/interface'
+  import { TableData } from '@arco-design/web-vue/es/table/interface.d'
   import { cloneDeep, assign, isBoolean } from 'lodash'
 
   const props = defineProps({
@@ -134,7 +134,7 @@
           showTotal: true,
           showJumper: true,
           showPageSize: true,
-          pageSizeOptions: [10, 20, 30],
+          pageSizeOptions: [10, 20, 30, 50, 100],
         },
         props.pagination
       )

@@ -44,7 +44,7 @@ setupMock({
       if (!password) {
         return failResponseWrap(null, '密码不能为空', 50000)
       }
-      if (username === 'demdev' && password === 'bonree') {
+      if (username === 'develop' && password === '123456') {
         window.localStorage.setItem('userRole', 'admin')
         return successResponseWrap({
           token: '12345',
