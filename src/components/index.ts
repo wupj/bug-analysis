@@ -9,12 +9,12 @@ import {
   DataZoomComponent,
   GraphicComponent,
 } from 'echarts/components'
-import Chart from './chart/index.vue'
-import Breadcrumb from './breadcrumb/index.vue'
-import Loading from './Loading/index.vue'
-import SvgIcon from './SvgIcon/index.vue'
-import Table from './Table/index.vue'
-import Select from './Select/index.vue'
+import Chart from './BasicComponents/Charts/index.vue'
+import Breadcrumb from './BasicComponents/Breadcrumb/index.vue'
+import Loading from './BasicComponents/Loading/index.vue'
+import SvgIcon from './BasicComponents/SvgIcon/index.vue'
+import Table from './BasicComponents/Table/index.vue'
+import Select from './BasicComponents/Select/index.vue'
 
 // Manually introduce ECharts modules to reduce packing size
 

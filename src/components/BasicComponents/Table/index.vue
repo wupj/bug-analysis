@@ -8,6 +8,7 @@
     :data="tableData"
     :pagination="tablePagination"
     pagePosition="bottom"
+    v-bind="$attrs"
     @sorter-change="sorterChange"
     @page-change="pageChange"
     @page-size-change="pageSizeChange"

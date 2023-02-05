@@ -26,7 +26,7 @@
 
 <script lang="tsx" setup>
   import { reactive, onBeforeMount } from 'vue'
-  import Select from '@/components/Select/index.vue'
+  import Select from '@/components/BasicComponents/Select/index.vue'
 
   const table = reactive({
     loading: true,

@@ -14,7 +14,7 @@ import 'virtual:svg-icons-register'
 
 import '@/style/index.less'
 import '@arco-design/web-vue/dist/arco.css'
-import '@/api/interceptor'
+import '@/utils/request'
 
 const app = createApp(App)
 
