@@ -15,6 +15,7 @@ import Loading from './BasicComponents/Loading/index.vue'
 import SvgIcon from './BasicComponents/SvgIcon/index.vue'
 import Table from './BasicComponents/Table/index.vue'
 import Select from './BasicComponents/Select/index.vue'
+import Search from './BasicComponents/Search/index.vue'
 
 // Manually introduce ECharts modules to reduce packing size
 
@@ -39,5 +40,6 @@ export default {
     Vue.component('Loading', Loading)
     Vue.component('Table', Table)
     Vue.component('Select', Select)
+    Vue.component('Search', Search)
   },
 }

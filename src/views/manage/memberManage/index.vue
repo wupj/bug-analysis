@@ -1,14 +1,21 @@
 <template>
   <div class="container">
     <a-row>
-      <a-col :span="24"> </a-col>
+      <a-col :span="24" class="padding-content">
+        <Search
+          :searchValue="searchText"
+          placeholder="请输入姓名"
+          @search="handleSearch"
+          @pressEnter="handleSearch"
+      /></a-col>
       <a-col :span="24">
         <Table
-          :rowKey="id"
+          rowKey="userId"
           :loading="loading"
-          :columns="table.columns"
-          :tableData="table.tableData"
-          :pagination="table.pagination"
+          :columns="columns"
+          :tableData="tableData"
+          :pagination="pagination"
+          showSelect
           @request="getTableData"
         />
       </a-col>
@@ -19,40 +26,37 @@
 <script lang="ts" setup>
   import { reactive, onBeforeMount } from 'vue'
   import { useMemberStore } from '@/store'
-  import useLoading from '@/hooks/loading'
 
   const userStore = useMemberStore()
 
-  const { loading, setLoading } = useLoading()
+  const { searchText, loading, tableData, pagination } = userStore
 
-  const table = reactive({
-    columns: [
-      {
-        title: '姓名',
-        dataIndex: 'userName',
-        width: '30%',
-        sort: true,
-        defaultSort: true,
-      },
-      {
-        title: '部门',
-        dataIndex: 'department',
-        width: '30%',
-      },
-      {
-        title: '职位',
-        dataIndex: 'post',
-        width: '30%',
-      },
-    ],
-    tableData: [],
-  })
+  const columns = reactive([
+    {
+      title: '姓名',
+      dataIndex: 'userName',
+      width: '30%',
+      sort: true,
+      defaultSort: true,
+    },
+    {
+      title: '部门',
+      dataIndex: 'department',
+      width: '30%',
+    },
+    {
+      title: '职位',
+      dataIndex: 'post',
+      width: '30%',
+    },
+  ])
 
-  const getTableData = async (params: any = null) => {
-    setLoading(true)
-    const data = await userStore.getTableData()
-    table.tableData = data
-    setLoading(false)
+  const handleSearch = (value: string) => {
+    userStore.setSearchText(value)
+  }
+
+  const getTableData = async (params: unknown = null) => {
+    await userStore.getTableData(params)
   }
   onBeforeMount(() => {
     getTableData()

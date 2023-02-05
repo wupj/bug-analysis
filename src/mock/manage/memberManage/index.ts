@@ -8,7 +8,10 @@ setupMock({
   setup() {
     // 用户信息
     Mock.mock(new RegExp('/api/memberManage/list'), (params: MockParams) => {
-      return successResponseWrap(data)
+      return successResponseWrap({
+        result: data,
+        total: data.length,
+      })
     })
   },
 })
