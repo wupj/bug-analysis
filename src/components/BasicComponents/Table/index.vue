@@ -21,7 +21,9 @@
 <script setup lang="ts">
   import { computed } from 'vue'
   import { TableData } from '@arco-design/web-vue/es/table/interface.d'
-  import { cloneDeep, assign, isBoolean } from 'lodash'
+  import cloneDeep from 'lodash/cloneDeep'
+  import assign from 'lodash/assign'
+  import isBoolean from 'lodash/isBoolean'
 
   const props = defineProps({
     /**
@@ -147,23 +149,23 @@
 
   /**
    * 排序状态改变时触发
-   * @param {string} dataIndex
+   * @param {string} sortName
    * @param {string} direction
    */
-  const sorterChange = (dataIndex: string, direction: string) => {
+  const sorterChange = (sortName: string, sortOrder: string) => {
     emit('request', {
-      dataIndex,
-      direction,
+      sortName,
+      sortOrder,
     })
   }
 
   /**
    * 页码切换改变时触发
-   * @param {string} page
+   * @param {string} pageNo
    */
-  const pageChange = (page: number) => {
+  const pageChange = (pageNo: number) => {
     emit('request', {
-      page,
+      pageNo,
     })
   }
 

@@ -1,21 +1,19 @@
 import { defineStore } from 'pinia'
 import { getUserList } from '@/api/manage/memberManage'
 import useLoading from '@/hooks/loading'
-import { PaginationProps } from '@arco-design/web-vue/es/pagination/interface.d'
 
 const { loading, setLoading } = useLoading(true)
 
-const initPagination = {
-  current: 1,
-  pageSize: 10,
-  total: 0,
-}
-
 export interface stateProps {
-  searchText?: string
   loading?: unknown
-  tableData: []
-  pagination: PaginationProps
+  tableData?: []
+  searchText?: string
+  searchName?: string
+  sortName?: string
+  sortOrder?: string
+  pageNo?: number
+  pageSize?: number
+  total?: number
 }
 
 const useMemberStore = defineStore('memberMange', {
@@ -23,8 +21,22 @@ const useMemberStore = defineStore('memberMange', {
     searchText: '',
     loading,
     tableData: [],
-    pagination: initPagination,
+    searchName: 'userName',
+    sortName: 'userName',
+    sortOrder: 'descend',
+    pageNo: 1,
+    pageSize: 20,
+    total: 0,
   }),
+  getters: {
+    pagination() {
+      return {
+        current: this.pageNo,
+        pageSize: this.pageSize,
+        total: this.total,
+      }
+    },
+  },
   actions: {
     setTableLoading(value: boolean) {
       setLoading(value)
@@ -35,19 +47,26 @@ const useMemberStore = defineStore('memberMange', {
       this.pagination.current = 1
       this.getTableData()
     },
-    async getTableData(params: unknown = null) {
+    async getTableData(params: unknown = {}) {
       this.setTableLoading(true)
-      const { data = [], code } = await getUserList(params)
+      Object.assign(this, params)
+      const { searchText, searchName, sortName, sortOrder, pageNo, pageSize } = this
+      const queryParams = {
+        searchText,
+        searchName,
+        sortName,
+        sortOrder,
+        pageNo,
+        pageSize,
+        ...params,
+      }
+      const { data = [], code } = await getUserList(queryParams)
       if (code === 200) {
         this.tableData = data.result
-        this.pagination.total = data.total
+        this.total = data.total
       }
-      this.setPagination(params)
       this.setTableLoading(false)
       return data
-    },
-    setPagination(value: any) {
-      this.pagination = Object.assign(this.pagination, value)
     },
   },
 })

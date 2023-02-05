@@ -25,11 +25,13 @@
 
 <script lang="ts" setup>
   import { reactive, onBeforeMount } from 'vue'
+  import { storeToRefs } from 'pinia'
   import { useMemberStore } from '@/store'
 
   const userStore = useMemberStore()
+  userStore.$reset()
 
-  const { searchText, loading, tableData, pagination } = userStore
+  const { searchText, loading, tableData, pagination } = storeToRefs(userStore)
 
   const columns = reactive([
     {
