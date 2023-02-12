@@ -1,3 +1,4 @@
+import isNil from 'lodash/isNil'
 import isNumber from 'lodash/isNumber'
 import debug from './env'
 
@@ -24,6 +25,9 @@ export const failResponseWrap = (data: unknown, msg: string, code = 500) => {
 }
 
 export const filterData = (params: any, data: any) => {
+  if (isNil(params.body)) {
+    return data
+  }
   const { searchText, searchName, sortName, sortOrder, pageNo, pageSize } = JSON.parse(params.body)
   const start = (pageNo - 1) * pageSize
   const end = pageNo * pageSize

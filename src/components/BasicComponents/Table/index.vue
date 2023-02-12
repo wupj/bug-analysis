@@ -1,4 +1,12 @@
 <template>
+  <div class="table-button">
+    <div class="left-button">
+      <slot name="leftButton" />
+    </div>
+    <div class="right-button">
+      <slot name="rightButton" />
+    </div>
+  </div>
   <a-table
     class="table-container"
     :loading="tableLoading"
@@ -145,7 +153,13 @@
     return false
   })
 
-  const emit = defineEmits(['request', 'selectionChange', 'rowClick'])
+  const emit = defineEmits([
+    'sorterChange',
+    'pageChange',
+    'pageSizeChange',
+    'selectionChange',
+    'rowClick',
+  ])
 
   /**
    * 排序状态改变时触发
@@ -153,7 +167,7 @@
    * @param {string} direction
    */
   const sorterChange = (sortName: string, sortOrder: string) => {
-    emit('request', {
+    emit('sorterChange', {
       sortName,
       sortOrder,
     })
@@ -164,7 +178,7 @@
    * @param {string} pageNo
    */
   const pageChange = (pageNo: number) => {
-    emit('request', {
+    emit('pageChange', {
       pageNo,
     })
   }
@@ -174,7 +188,7 @@
    * @param {number} pageSize
    */
   const pageSizeChange = (pageSize: number) => {
-    emit('request', {
+    emit('pageSizeChange', {
       pageSize,
     })
   }
@@ -203,6 +217,26 @@
 </script>
 
 <style lang="less" scoped>
+  .table-button {
+    display: flex;
+    flex: 1;
+    padding: 0 @padding-medium;
+
+    .left-button,
+    .right-button {
+      display: flex;
+      flex: 1;
+    }
+
+    .left-button {
+      justify-content: left;
+    }
+
+    .right-button {
+      justify-content: right;
+    }
+  }
+
   .table-container {
     position: relative;
     width: 100%;

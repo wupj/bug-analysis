@@ -3,14 +3,13 @@
     :v-model="selectVal"
     :default-value="defaultVal"
     :loading="loading"
-    :placeholder="placeholderText"
+    :placeholder="placeholder"
     :style="selectStyle"
     v-bind="$attrs"
   >
     <a-option v-for="(item, idx) in data" :key="idx" :value="item[fieldNames.value]">
       {{ item[fieldNames.label] }}
     </a-option>
-    <!-- 具名插槽 -->
     <slot name="footer"></slot>
   </a-select>
 </template>
@@ -63,7 +62,7 @@
     /**
      * 提示文案
      */
-    placeholderText: {
+    placeholder: {
       type: String,
       default: '',
     },
@@ -86,12 +85,6 @@
      */
     selectStyle: {
       type: Object,
-      default: () => {
-        return {
-          width: '160px',
-          height: '32px',
-        }
-      },
     },
   })
 </script>

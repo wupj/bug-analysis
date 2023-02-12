@@ -1,19 +1,22 @@
 import { defineStore } from 'pinia'
 import { getUserList } from '@/api/manage/memberManage'
+import { getDepartmentList } from '@/api/manage/departmentManage'
 import useLoading from '@/hooks/loading'
+import { tableSorter, tablePage, tablePageSize, Pagination } from '@/types/global'
 
 const { loading, setLoading } = useLoading(true)
 
 export interface stateProps {
   loading?: unknown
   tableData?: []
+  departmentData?: []
   searchText?: string
   searchName?: string
   sortName?: string
   sortOrder?: string
-  pageNo?: number
-  pageSize?: number
-  total?: number
+  pageNo: number
+  pageSize: number
+  total: number
 }
 
 const useMemberStore = defineStore('memberMange', {
@@ -21,6 +24,7 @@ const useMemberStore = defineStore('memberMange', {
     searchText: '',
     loading,
     tableData: [],
+    departmentData: [],
     searchName: 'userName',
     sortName: 'userName',
     sortOrder: 'descend',
@@ -29,7 +33,7 @@ const useMemberStore = defineStore('memberMange', {
     total: 0,
   }),
   getters: {
-    pagination() {
+    pagination(): Pagination {
       return {
         current: this.pageNo,
         pageSize: this.pageSize,
@@ -47,9 +51,21 @@ const useMemberStore = defineStore('memberMange', {
       this.pagination.current = 1
       this.getTableData()
     },
-    async getTableData(params: unknown = {}) {
+    sorterChange(params: tableSorter) {
+      this.sortName = params.sortName
+      this.sortOrder = params.sortOrder
+      this.getTableData()
+    },
+    pageChange(params: tablePage) {
+      this.pageNo = params.pageNo
+      this.getTableData()
+    },
+    pageSizeChange(params: tablePageSize) {
+      this.pageSize = params.pageSize
+      this.getTableData()
+    },
+    async getTableData() {
       this.setTableLoading(true)
-      Object.assign(this, params)
       const { searchText, searchName, sortName, sortOrder, pageNo, pageSize } = this
       const queryParams = {
         searchText,
@@ -58,14 +74,22 @@ const useMemberStore = defineStore('memberMange', {
         sortOrder,
         pageNo,
         pageSize,
-        ...params,
       }
+      // @ts-ignore
       const { data = [], code } = await getUserList(queryParams)
       if (code === 200) {
         this.tableData = data.result
         this.total = data.total
       }
       this.setTableLoading(false)
+      return data
+    },
+    async getDepartment() {
+      // @ts-ignore
+      const { data = [], code } = await getDepartmentList()
+      if (code === 200) {
+        this.departmentData = data.result
+      }
       return data
     },
   },

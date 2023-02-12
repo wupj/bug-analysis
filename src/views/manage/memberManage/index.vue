@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <a-row>
+    <a-row class="arco-row-block">
       <a-col :span="24" class="padding-content">
         <Search
           :searchValue="searchText"
-          placeholder="请输入姓名"
+          :placeholder="$t('memberManage.enterName')"
           @search="handleSearch"
-          @pressEnter="handleSearch"
+          @press-enter="handleSearch"
       /></a-col>
       <a-col :span="24">
         <Table
@@ -16,17 +16,28 @@
           :tableData="tableData"
           :pagination="pagination"
           showSelect
-          @request="getTableData"
-        />
+          @sorterChange="sorterChange"
+          @pageChange="pageChange"
+          @pageSizeChange="pageSizeChange"
+        >
+          <template #leftButton
+            ><a-button type="primary" @click="clickAdd">{{ $t('global.add') }}</a-button></template
+          >
+        </Table>
+        <Add ref="addRef" />
       </a-col>
     </a-row>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, onBeforeMount } from 'vue'
+  import { ref, reactive, onBeforeMount } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useMemberStore } from '@/store'
+  import { tableSorter, tablePage, tablePageSize } from '@/types/global'
+  import Add from './add.vue'
+
+  const addRef = ref<null>(null)
 
   const userStore = useMemberStore()
   userStore.$reset()
@@ -57,11 +68,23 @@
     userStore.setSearchText(value)
   }
 
-  const getTableData = async (params: unknown = null) => {
-    await userStore.getTableData(params)
+  const clickAdd = () => {
+    addRef.value?.showModal()
+  }
+
+  const sorterChange = (params: tableSorter) => {
+    userStore.sorterChange(params)
+  }
+
+  const pageChange = (params: tablePage) => {
+    userStore.pageChange(params)
+  }
+
+  const pageSizeChange = (params: tablePageSize) => {
+    userStore.pageSizeChange(params)
   }
   onBeforeMount(() => {
-    getTableData()
+    userStore.getTableData()
   })
 </script>
 

@@ -23,10 +23,23 @@ export interface PostData {
   url: string
 }
 
-export interface Pagination {
-  current: number
+export interface tableSorter {
+  sortName: string
+  sortOrder: string
+}
+
+export interface tablePage {
+  pageNo: number
+}
+
+export interface tablePageSize {
   pageSize: number
-  total?: number
+}
+
+export interface Pagination {
+  current: number | string
+  pageSize: number | string
+  total?: number | string
 }
 
 export type TimeRanger = [string, string]
