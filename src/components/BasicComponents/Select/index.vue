@@ -1,12 +1,5 @@
 <template>
-  <a-select
-    :v-model="selectVal"
-    :default-value="defaultVal"
-    :loading="loading"
-    :placeholder="placeholder"
-    :style="selectStyle"
-    v-bind="$attrs"
-  >
+  <a-select :loading="loading" :placeholder="placeholder" :style="selectStyle" v-bind="$attrs">
     <a-option v-for="(item, idx) in data" :key="idx" :value="item[fieldNames.value]">
       {{ item[fieldNames.label] }}
     </a-option>
@@ -16,7 +9,7 @@
 
 <script setup lang="ts">
   import { PropType } from 'vue'
-  import { SelectOptionData, SelectOptionValue } from '@arco-design/web-vue/es/select/interface.d'
+  import { SelectOptionData } from '@arco-design/web-vue/es/select/interface.d'
 
   defineProps({
     /**
@@ -25,20 +18,6 @@
     loading: {
       type: Boolean,
       default: false,
-    },
-    /**
-     * 默认的值
-     */
-    defaultVal: {
-      type: String as PropType<SelectOptionValue>,
-      default: '',
-    },
-    /**
-     * 选中的值
-     */
-    selectVal: {
-      type: String,
-      default: undefined,
     },
     /**
      * 自定义 SelectOptionData 中的字段

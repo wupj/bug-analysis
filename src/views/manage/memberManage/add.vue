@@ -1,11 +1,5 @@
 <template>
-  <a-modal
-    v-model:visible="visible"
-    :title="$t('global.add')"
-    :okLoading="okLoading"
-    @before-ok="handleBeforeOk"
-    @cancel="handleCancel"
-  >
+  <a-modal v-model:visible="visible" :title="$t('memberManage.addName')" @cancel="handleCancel">
     <a-form ref="formRef" :model="form">
       <a-form-item field="name" :label="$t('memberManage.name')" :rules="rules.name">
         <a-input v-model="form.name" :placeholder="$t('input.onlyChineseLetters')" />
@@ -16,27 +10,36 @@
         :rules="rules.department"
       >
         <Select
+          v-model="form.department"
           :fieldNames="fieldNames"
-          :selectVal="form.department"
           :data="departmentData"
           :placeholder="$t('select.pleaseSelect')"
           @change="changeDepartment"
         />
       </a-form-item>
     </a-form>
+    <template #footer>
+      <a-button @click="handleCancel">{{ $t('button.cancel') }}</a-button>
+      <a-button type="primary" :loading="loading" @click.stop="handleSubmit">{{
+        $t('button.ok')
+      }}</a-button>
+    </template>
   </a-modal>
 </template>
 
 <script lang="ts" setup>
   import { ref, reactive, defineExpose, onBeforeMount } from 'vue'
+  import { ValidatedError } from '@arco-design/web-vue/es/form/interface.d'
   import { useMemberStore } from '@/store'
+  import message from '@/utils/message'
+  import { validateChineseOrLetter } from '@/utils/validate'
   import { storeToRefs } from 'pinia'
   import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
 
   const visible = ref<boolean>(false)
-  const okLoading = ref<boolean>(false)
+  const loading = ref<boolean>(false)
   const formRef = ref<null>(null)
   const fieldNames = ref({
     label: 'department',
@@ -51,13 +54,19 @@
   })
 
   const rules = reactive({
-    name: {
-      required: true,
-      message: t('input.onlyChineseLetters'),
-    },
+    name: [
+      {
+        required: true,
+        message: t('validate.cannotBeNull'),
+      },
+      {
+        validator: validateChineseOrLetter,
+        message: t('validate.incorrectFormat'),
+      },
+    ],
     department: {
       required: true,
-      message: t('select.pleaseSelect'),
+      message: t('memberManage.selectDepartment'),
     },
   })
 
@@ -72,12 +81,13 @@
     form.department = value
   }
 
-  const handleBeforeOk = () => {
-    okLoading.value = true
-    formRef.value?.validate((errors) => {
-      okLoading.value = false
+  const handleSubmit = () => {
+    loading.value = true
+    formRef.value?.validate((errors: ValidatedError) => {
+      loading.value = false
       if (!errors) {
         handleCancel()
+        message.success(t('message.operationSuccessful'))
       }
     })
   }

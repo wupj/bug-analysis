@@ -3,4 +3,5 @@ export default {
   'memberManage.addName': 'Add name',
   'memberManage.name': 'Name',
   'memberManage.department': 'Department',
+  'memberManage.selectDepartment': 'Please select department',
 }
