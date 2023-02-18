@@ -5,6 +5,7 @@
     </div>
     <div class="right-button">
       <slot name="rightButton" />
+      <Export type="table" :tableColumns="tableColumns" :tableData="tableData" />
     </div>
   </div>
   <a-table
@@ -32,6 +33,7 @@
   import cloneDeep from 'lodash/cloneDeep'
   import assign from 'lodash/assign'
   import isBoolean from 'lodash/isBoolean'
+  import Export from '@/components/BusinessComponents/Export/index.vue'
 
   const props = defineProps({
     /**

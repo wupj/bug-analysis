@@ -1,5 +1,7 @@
 <template>
-  <div class="container"> </div>
+  <div class="container">
+    <SvgIcon iconName="home" className="home" :style="{ flex: 1 }" />
+  </div>
 </template>
 
 <script lang="tsx" setup></script>

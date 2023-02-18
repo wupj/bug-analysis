@@ -1,5 +1,9 @@
 <template>
-  <a-modal v-model:visible="visible" :title="$t('memberManage.addName')" @cancel="handleCancel">
+  <a-modal
+    v-model:visible="visible"
+    :title="isEdit ? $t('memberManage.editName') : $t('memberManage.addName')"
+    @cancel="handleCancel"
+  >
     <a-form ref="formRef" :model="form">
       <a-form-item field="name" :label="$t('memberManage.name')" :rules="rules.name">
         <a-input v-model="form.name" :placeholder="$t('input.onlyChineseLetters')" />
@@ -11,10 +15,19 @@
       >
         <Select
           v-model="form.department"
-          :fieldNames="fieldNames"
+          :fieldNames="departmentField"
           :data="departmentData"
           :placeholder="$t('select.pleaseSelect')"
-          @change="changeDepartment"
+          @select="changeDepartment"
+        />
+      </a-form-item>
+      <a-form-item field="position" :label="$t('memberManage.position')" :rules="rules.position">
+        <Select
+          v-model="form.position"
+          :fieldNames="positionField"
+          :data="positionData"
+          :placeholder="$t('select.pleaseSelect')"
+          @select="changePosition"
         />
       </a-form-item>
     </a-form>
@@ -29,28 +42,36 @@
 
 <script lang="ts" setup>
   import { ref, reactive, defineExpose, onBeforeMount } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import { useI18n } from 'vue-i18n'
+  import { FormInstance } from '@arco-design/web-vue/es/form'
   import { ValidatedError } from '@arco-design/web-vue/es/form/interface.d'
   import { useMemberStore } from '@/store'
   import message from '@/utils/message'
   import { validateChineseOrLetter } from '@/utils/validate'
-  import { storeToRefs } from 'pinia'
-  import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
 
   const visible = ref<boolean>(false)
+  const isEdit = ref<boolean>(false)
   const loading = ref<boolean>(false)
-  const formRef = ref<null>(null)
-  const fieldNames = ref({
+  const formRef = ref<FormInstance | null>(null)
+  const departmentField = ref({
     label: 'department',
     value: 'departmentId',
+  })
+  const positionField = ref({
+    label: 'position',
+    value: 'positionId',
   })
   const form = reactive<{
     name: string
     department: string
+    position: string
   }>({
     name: '',
     department: '',
+    position: '',
   })
 
   const rules = reactive({
@@ -68,24 +89,46 @@
       required: true,
       message: t('memberManage.selectDepartment'),
     },
+    position: {
+      required: true,
+      message: t('memberManage.selectPosition'),
+    },
   })
 
   const userStore = useMemberStore()
-  const { departmentData } = storeToRefs(userStore)
+  const { departmentData, positionData } = storeToRefs(userStore)
 
-  const showModal = () => {
+  const showModal = (row) => {
+    if (row) {
+      form.name = row.userName
+      form.department = row.department
+      form.position = row.post
+      isEdit.value = true
+    }
     visible.value = true
   }
 
-  const changeDepartment = (value: string) => {
-    form.department = value
+  const changeDepartment = (value: unknown) => {
+    form.departmentId = value.departmentId
+    form.department = value.department
+  }
+
+  const changePosition = (value: unknown) => {
+    form.positionId = value.positionId
+    form.position = value.position
   }
 
   const handleSubmit = () => {
     loading.value = true
-    formRef.value?.validate((errors: ValidatedError) => {
+    formRef.value?.validate((errors: Record<string, ValidatedError> | undefined) => {
       loading.value = false
       if (!errors) {
+        userStore.addData({
+          userId: Math.random(10) * 10,
+          userName: form.name,
+          post: form.position,
+          ...form,
+        })
         handleCancel()
         message.success(t('message.operationSuccessful'))
       }
@@ -94,12 +137,14 @@
 
   const handleCancel = () => {
     visible.value = false
+    isEdit.value = false
     form.department = ''
     formRef.value?.resetFields()
   }
 
   onBeforeMount(() => {
     userStore.getDepartment()
+    userStore.getPosition()
   })
 
   defineExpose({

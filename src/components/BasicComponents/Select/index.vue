@@ -1,6 +1,11 @@
 <template>
   <a-select :loading="loading" :placeholder="placeholder" :style="selectStyle" v-bind="$attrs">
-    <a-option v-for="(item, idx) in data" :key="idx" :value="item[fieldNames.value]">
+    <a-option
+      v-for="(item, idx) in data"
+      :key="idx"
+      :value="item[fieldNames.value]"
+      @click="handleSelect(item)"
+    >
       {{ item[fieldNames.label] }}
     </a-option>
     <slot name="footer"></slot>
@@ -66,6 +71,12 @@
       type: Object,
     },
   })
+
+  const emit = defineEmits(['select'])
+
+  const handleSelect = (item: SelectOptionData) => {
+    emit('select', item)
+  }
 </script>
 
 <script lang="ts">

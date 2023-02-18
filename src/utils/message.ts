@@ -2,27 +2,27 @@ import { Message } from '@arco-design/web-vue'
 
 import { MessageConfig } from '@arco-design/web-vue/es/message/interface.d'
 
-const info = (config: MessageConfig) => {
+const info = (config: string | MessageConfig) => {
   Message.clear()
   Message.info(config)
 }
 
-const success = (config: MessageConfig) => {
+const success = (config: string | MessageConfig) => {
   Message.clear()
   Message.success(config)
 }
 
-const warning = (config: MessageConfig) => {
+const warning = (config: string | MessageConfig) => {
   Message.clear()
   Message.warning(config)
 }
 
-const error = (config: MessageConfig) => {
+const error = (config: string | MessageConfig) => {
   Message.clear()
   Message.error(config)
 }
 
-const loading = (config: MessageConfig) => {
+const loading = (config: string | MessageConfig) => {
   Message.clear()
   Message.loading(config)
 }

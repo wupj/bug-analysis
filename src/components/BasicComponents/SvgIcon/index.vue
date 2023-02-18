@@ -19,10 +19,6 @@
     },
     style: {
       type: Object,
-      default: () => ({
-        width: '16px',
-        height: '16px',
-      }),
     },
   })
   const iconClass = computed(() => `#icon-${props.iconName}`)
@@ -40,8 +36,10 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .svg-icon {
+    width: @base-px * 4;
+    height: @base-px * 4;
     vertical-align: middle;
   }
 </style>

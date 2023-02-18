@@ -10,6 +10,5 @@ export default [
   {
     departmentId: '3',
     department: '产品部',
-    post: '测试工程师',
   },
 ]

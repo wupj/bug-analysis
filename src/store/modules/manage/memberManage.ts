@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-import { getUserList } from '@/api/manage/memberManage'
-import { getDepartmentList } from '@/api/manage/departmentManage'
+import { getUserList, DeleteUser, getDepartment, getPosition } from '@/api/manage/memberManage'
 import useLoading from '@/hooks/loading'
 import { tableSorter, tablePage, tablePageSize, Pagination } from '@/types/global'
 
@@ -10,6 +9,7 @@ export interface stateProps {
   loading?: unknown
   tableData?: []
   departmentData?: []
+  positionData?: []
   searchText?: string
   searchName?: string
   sortName?: string
@@ -25,6 +25,7 @@ const useMemberStore = defineStore('memberMange', {
     loading,
     tableData: [],
     departmentData: [],
+    positionData: [],
     searchName: 'userName',
     sortName: 'userName',
     sortOrder: 'descend',
@@ -86,11 +87,33 @@ const useMemberStore = defineStore('memberMange', {
     },
     async getDepartment() {
       // @ts-ignore
-      const { data = [], code } = await getDepartmentList()
+      const { data = [], code } = await getDepartment()
       if (code === 200) {
         this.departmentData = data.result
       }
       return data
+    },
+    async DeleteUser(ids) {
+      this.setTableLoading(true)
+      const { data = [], code } = await DeleteUser({ ids, filterField: 'userId' })
+      if (code === 200) {
+        this.tableData = data.result
+        this.total = data.total
+      }
+      this.setTableLoading(false)
+      return data
+    },
+    async getPosition() {
+      // @ts-ignore
+      const { data = [], code } = await getPosition()
+      if (code === 200) {
+        this.positionData = data.result
+      }
+      return data
+    },
+    addData(data: any) {
+      // @ts-ignore
+      this.tableData.unshift(data)
     },
   },
 })

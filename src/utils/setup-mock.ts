@@ -45,3 +45,13 @@ export const filterData = (params: any, data: any) => {
   })
   return searchData.slice(start, end)
 }
+
+export const simulateDelete = (params: any, data: any) => {
+  if (isNil(params.body)) {
+    return data
+  }
+  const { ids, filterField } = JSON.parse(params.body)
+  return data.filter((item: any) => {
+    return !ids.includes(item[filterField])
+  })
+}

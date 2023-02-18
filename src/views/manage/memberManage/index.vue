@@ -16,12 +16,21 @@
           :tableData="tableData"
           :pagination="pagination"
           showSelect
-          @sorterChange="sorterChange"
-          @pageChange="pageChange"
-          @pageSizeChange="pageSizeChange"
+          @selection-change="selectionChange"
+          @sorter-change="sorterChange"
+          @page-change="pageChange"
+          @page-size-change="pageSizeChange"
         >
           <template #leftButton
-            ><a-button type="primary" @click="clickAdd">{{ $t('global.add') }}</a-button></template
+            ><a-button type="primary" @click="clickAdd">{{ $t('global.add') }}</a-button
+            ><a-button
+              class="ml8"
+              type="primary"
+              status="danger"
+              :disabled="!selectRow.length"
+              @click="clickDelete"
+              >{{ $t('global.delete') }}</a-button
+            ></template
           >
         </Table>
         <Add ref="addRef" />
@@ -30,12 +39,15 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="tsx" setup>
   import { ref, reactive, onBeforeMount } from 'vue'
   import { storeToRefs } from 'pinia'
+  import { useI18n } from 'vue-i18n'
   import { useMemberStore } from '@/store'
   import { tableSorter, tablePage, tablePageSize } from '@/types/global'
   import Add from './add.vue'
+
+  const { t } = useI18n()
 
   const addRef = ref<null>(null)
 
@@ -44,23 +56,39 @@
 
   const { searchText, loading, tableData, pagination } = storeToRefs(userStore)
 
+  const selectRow = reactive([])
   const columns = reactive([
     {
-      title: '姓名',
+      title: t('memberManage.name'),
       dataIndex: 'userName',
       width: '30%',
       sort: true,
       defaultSort: true,
     },
     {
-      title: '部门',
+      title: t('memberManage.department'),
       dataIndex: 'department',
       width: '30%',
     },
     {
-      title: '职位',
+      title: t('memberManage.position'),
       dataIndex: 'post',
       width: '30%',
+    },
+    {
+      title: t('global.operation'),
+      dataIndex: 'operation',
+      width: '10%',
+      render: ({ record }) => {
+        return (
+          <div>
+            <a-link onClick={() => clickAdd(record)}>{t('global.edit')}</a-link>
+            <a-link status="danger" onClick={() => clickRowDelete(record)}>
+              {t('global.delete')}
+            </a-link>
+          </div>
+        )
+      },
     },
   ])
 
@@ -68,8 +96,20 @@
     userStore.setSearchText(value)
   }
 
-  const clickAdd = () => {
-    addRef.value?.showModal()
+  const clickAdd = (row) => {
+    addRef.value?.showModal(row)
+  }
+
+  const clickDelete = () => {
+    userStore.DeleteUser(selectRow)
+  }
+
+  const clickRowDelete = (row) => {
+    userStore.DeleteUser([row.userId])
+  }
+
+  const selectionChange = async (rowKeys) => {
+    selectRow.push(...rowKeys)
   }
 
   const sorterChange = (params: tableSorter) => {
@@ -88,7 +128,7 @@
   })
 </script>
 
-<script lang="ts">
+<script lang="tsx">
   export default {
     name: 'MemberManage',
   }
