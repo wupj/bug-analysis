@@ -52,6 +52,8 @@
 
   const { t } = useI18n()
 
+  const emit = defineEmits(['done'])
+
   const visible = ref<boolean>(false)
   const isEdit = ref<boolean>(false)
   const loading = ref<boolean>(false)
@@ -120,17 +122,20 @@
 
   const handleSubmit = () => {
     loading.value = true
-    formRef.value?.validate((errors: Record<string, ValidatedError> | undefined) => {
+    formRef.value?.validate(async (errors: Record<string, ValidatedError> | undefined) => {
       loading.value = false
       if (!errors) {
-        userStore.addData({
+        const res = await userStore.addData({
           userId: Math.random(10) * 10,
           userName: form.name,
           post: form.position,
           ...form,
         })
-        handleCancel()
-        message.success(t('message.operationSuccessful'))
+        if (res.code === 200) {
+          handleCancel()
+          emit('done')
+          message.success(t('message.operationSuccessful'))
+        }
       }
     })
   }

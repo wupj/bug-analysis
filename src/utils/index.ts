@@ -29,7 +29,7 @@ export const toFixed = (value: any, bit = 0) => {
 }
 
 /**
- * 四舍五入
+ * 导出表格数据
  * @param  {Array}      columns      导出的列
  * @param  {Array}      data         导出的数据
  * @param  {String}     fileName     文件名字
@@ -38,6 +38,7 @@ export const exportExcel = async (columns: any[], data: TableData[], fileName: s
   const filterFields = ['operation']
   // 过滤掉不需要导出的列
   const exportColumns = columns.filter((item: TableColumnData) => {
+    // @ts-ignore
     return !filterFields.includes(item.dataIndex)
   })
   // 表格的宽度

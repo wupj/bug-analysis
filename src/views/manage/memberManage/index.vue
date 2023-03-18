@@ -33,7 +33,7 @@
             ></template
           >
         </Table>
-        <Add ref="addRef" />
+        <Add ref="addRef" @done="handleSearch" />
       </a-col>
     </a-row>
   </div>
@@ -92,7 +92,7 @@
     },
   ])
 
-  const handleSearch = (value: string) => {
+  const handleSearch = (value = '') => {
     userStore.setSearchText(value)
   }
 

@@ -1,5 +1,9 @@
 import isNil from 'lodash/isNil'
 import isNumber from 'lodash/isNumber'
+import forEach from 'lodash/forEach'
+import filter from 'lodash/filter'
+import localforage from 'localforage'
+
 import debug from './env'
 
 export default ({ mock, setup }: { mock?: boolean; setup: () => void }) => {
@@ -24,6 +28,11 @@ export const failResponseWrap = (data: unknown, msg: string, code = 500) => {
   }
 }
 
+/**
+ * 获取localForage的数据
+ * @param  {string}   params 参数
+ * @param  {Array}    data   数据
+ */
 export const filterData = (params: any, data: any) => {
   if (isNil(params.body)) {
     return data
@@ -39,19 +48,101 @@ export const filterData = (params: any, data: any) => {
     }
     return sortOrder === 'descend' ? c.localeCompare(n, 'zh') : n.localeCompare(c, 'zh')
   })
-  const searchData = sortData.filter((item: any) => {
+  const searchData = filter(sortData, (item: any) => {
     const value = item[sortName]
     return value.includes(searchText)
   })
   return searchData.slice(start, end)
 }
 
+/**
+ * 模拟数据删除
+ * @param  {string}   params 参数
+ * @param  {Array}    data   数据
+ */
 export const simulateDelete = (params: any, data: any) => {
   if (isNil(params.body)) {
     return data
   }
   const { ids, filterField } = JSON.parse(params.body)
-  return data.filter((item: any) => {
+  return filter(data, (item: any) => {
     return !ids.includes(item[filterField])
   })
+}
+
+/**
+ * 获取localForage的数据
+ * @param  {String}   key
+ */
+export const getLocalData = async (key: string) => {
+  const data = await localforage.getItem(key)
+  return data
+}
+
+/**
+ * 设置localForage的数据
+ * @param  {String}   key
+ * @param  {Array}   data
+ */
+export const setLocalData = (key: string, data: []) => {
+  localforage.setItem(key, data)
+}
+
+/**
+ * 清除localForage的数据
+ */
+export const clearLocalData = () => {
+  localforage.clear()
+}
+
+/**
+ * 增加localForage的数据
+ * @param  {String}   key
+ * @param  {String}   field
+ * @param  {Object}   data
+ */
+export const addLocalData = async (key: string, field: string, value: []) => {
+  const $data = await getLocalData(key)
+  $data.unshift({
+    [field]: Math.random() * 1000,
+    ...value,
+  })
+  setLocalData(key, $data)
+}
+
+/**
+ * 修改localForage的数据
+ * @param  {String}   key
+ * @param  {String}   field
+ * @param  {String}   fieldValue
+ * @param  {Object}   data
+ */
+export const editLocalData = async (
+  key: string,
+  field: string,
+  fieldValue: number | string,
+  value: any
+) => {
+  const $data = await getLocalData(key)
+  forEach($data, (item: any) => {
+    let $item = item
+    if (item[field] === fieldValue) {
+      $item = { ...value }
+    }
+  })
+  setLocalData(key, $data)
+}
+
+/**
+ * 删除localForage的数据
+ * @param  {String}   key
+ * @param  {String}   field
+ * @param  {Object}   data
+ */
+export const deleteLocalData = async (key: string, field: string, value: []) => {
+  const $data = await getLocalData(key)
+  const dealData = filter($data, (item: any) => {
+    return !value.includes(item[field])
+  })
+  setLocalData(key, dealData)
 }

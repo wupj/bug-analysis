@@ -22,6 +22,10 @@ export default defineConfig({
         replacement: resolve(__dirname, '../src'),
       },
       {
+        find: 'mock',
+        replacement: resolve(__dirname, '../mock'),
+      },
+      {
         find: 'assets',
         replacement: resolve(__dirname, '../src/assets'),
       },

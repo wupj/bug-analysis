@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia'
-import { getUserList, DeleteUser, getDepartment, getPosition } from '@/api/manage/memberManage'
+import {
+  getUserList,
+  DeleteUser,
+  getDepartment,
+  getPosition,
+  addUser,
+} from '@/api/manage/memberManage'
 import useLoading from '@/hooks/loading'
 import { tableSorter, tablePage, tablePageSize, Pagination } from '@/types/global'
+import message from '@/utils/message'
 
 const { loading, setLoading } = useLoading(true)
 
@@ -95,13 +102,11 @@ const useMemberStore = defineStore('memberMange', {
     },
     async DeleteUser(ids) {
       this.setTableLoading(true)
-      const { data = [], code } = await DeleteUser({ ids, filterField: 'userId' })
+      const { code } = await DeleteUser({ ids })
       if (code === 200) {
-        this.tableData = data.result
-        this.total = data.total
+        message.success(t('message.operationSuccessful'))
+        this.getTableData()
       }
-      this.setTableLoading(false)
-      return data
     },
     async getPosition() {
       // @ts-ignore
@@ -111,9 +116,9 @@ const useMemberStore = defineStore('memberMange', {
       }
       return data
     },
-    addData(data: any) {
-      // @ts-ignore
-      this.tableData.unshift(data)
+    async addData(data: any) {
+      const res = await addUser(data)
+      return res
     },
   },
 })
