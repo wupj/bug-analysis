@@ -12,4 +12,9 @@
   }
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+  .svg-icon {
+    width: auto;
+    height: auto;
+  }
+</style>

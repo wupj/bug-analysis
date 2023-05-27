@@ -6,6 +6,9 @@ export function getUserList(data: unknown) {
 export function addUser(data: unknown) {
   return axios.post('/api/memberManage/add', data)
 }
+export function editUser(data: unknown) {
+  return axios.post('/api/memberManage/edit', data)
+}
 export function DeleteUser(data: unknown) {
   return axios.post('/api/memberManage/deleteById', data)
 }

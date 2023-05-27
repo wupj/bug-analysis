@@ -2,9 +2,9 @@ import Mock from 'mockjs-async'
 import setupMock, {
   addLocalData,
   deleteLocalData,
+  editLocalData,
   filterData,
   getLocalData,
-  simulateDelete,
   successResponseWrap,
 } from '@/utils/setup-mock'
 import { MockParams } from '@/types/mock'
@@ -27,7 +27,14 @@ setupMock({
     // 增加人员信息
     Mock.mock(new RegExp('/api/memberManage/add'), (params: MockParams) => {
       return new Promise(async (resolve) => {
-        const res = await addLocalData('userData', 'userId', JSON.parse(params.body))
+        addLocalData('userData', 'userId', JSON.parse(params.body))
+        resolve(successResponseWrap())
+      })
+    })
+    // 编辑人员信息
+    Mock.mock(new RegExp('/api/memberManage/edit'), (params: MockParams) => {
+      return new Promise(async (resolve) => {
+        editLocalData('userData', 'userId', JSON.parse(params.body).userId, JSON.parse(params.body))
         resolve(successResponseWrap())
       })
     })

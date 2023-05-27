@@ -6,7 +6,7 @@
           :searchValue="searchText"
           :placeholder="$t('memberManage.enterName')"
           @search="handleSearch"
-          @press-enter="handleSearch"
+          @press-enter.self="handleEenter"
       /></a-col>
       <a-col :span="24">
         <Table
@@ -96,7 +96,11 @@
     userStore.setSearchText(value)
   }
 
-  const clickAdd = (row) => {
+  const handleEenter = (Event) => {
+    handleSearch(Event?.currentTarget?.value)
+  }
+
+  const clickAdd = (row: unknown) => {
     addRef.value?.showModal(row)
   }
 
@@ -104,11 +108,11 @@
     userStore.DeleteUser(selectRow)
   }
 
-  const clickRowDelete = (row) => {
+  const clickRowDelete = (row: unknown) => {
     userStore.DeleteUser([row.userId])
   }
 
-  const selectionChange = async (rowKeys) => {
+  const selectionChange = async (rowKeys: []) => {
     selectRow.push(...rowKeys)
   }
 

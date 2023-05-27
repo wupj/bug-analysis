@@ -1,24 +1,13 @@
 import { defineStore } from 'pinia'
-import i18n from '@/locale'
-import {
-  getUserList,
-  DeleteUser,
-  getDepartment,
-  getPosition,
-  addUser,
-  editUser,
-} from '@/api/manage/memberManage'
+import { getBugTypeList } from '@/api/manage/bugTypeManage'
 import useLoading from '@/hooks/loading'
 import { tableSorter, tablePage, tablePageSize, Pagination } from '@/types/global'
-import message from '@/utils/message'
 
 const { loading, setLoading } = useLoading(true)
 
 export interface stateProps {
   loading?: unknown
   tableData?: []
-  departmentData?: []
-  positionData?: []
   searchText?: string
   searchName?: string
   sortName?: string
@@ -28,15 +17,13 @@ export interface stateProps {
   total: number
 }
 
-const useMemberStore = defineStore('memberMange', {
+const useBugTypeStore = defineStore('memberMange', {
   state: (): stateProps => ({
     searchText: '',
     loading,
     tableData: [],
-    departmentData: [],
-    positionData: [],
-    searchName: 'userName',
-    sortName: 'userName',
+    searchName: 'name',
+    sortName: 'name',
     sortOrder: 'descend',
     pageNo: 1,
     pageSize: 20,
@@ -86,7 +73,7 @@ const useMemberStore = defineStore('memberMange', {
         pageSize,
       }
       // @ts-ignore
-      const { data = [], code } = await getUserList(queryParams)
+      const { data = [], code } = await getBugTypeList(queryParams)
       if (code === 200) {
         this.tableData = data.result
         this.total = data.total
@@ -94,36 +81,7 @@ const useMemberStore = defineStore('memberMange', {
       this.setTableLoading(false)
       return data
     },
-    async getDepartment() {
-      // @ts-ignore
-      const { data = [], code } = await getDepartment()
-      if (code === 200) {
-        this.departmentData = data.result
-      }
-      return data
-    },
-    async DeleteUser(ids) {
-      this.setTableLoading(true)
-      const { code } = await DeleteUser({ ids })
-      if (code === 200) {
-        message.success(i18n.global.t('message.operationSuccessful'))
-        this.getTableData()
-      }
-    },
-    async getPosition() {
-      // @ts-ignore
-      const { data = [], code } = await getPosition()
-      if (code === 200) {
-        this.positionData = data.result
-      }
-      return data
-    },
-    async addData(data: any, isEdit) {
-      const request = isEdit ? editUser : addUser
-      const res = await request(data)
-      return res
-    },
   },
 })
 
-export default useMemberStore
+export default useBugTypeStore

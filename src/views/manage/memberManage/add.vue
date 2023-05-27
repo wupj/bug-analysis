@@ -67,10 +67,12 @@
     value: 'positionId',
   })
   const form = reactive<{
+    userId: string
     name: string
     department: string
     position: string
   }>({
+    userId: '',
     name: '',
     department: '',
     position: '',
@@ -102,6 +104,7 @@
 
   const showModal = (row) => {
     if (row) {
+      form.userId = row.userId
       form.name = row.userName
       form.department = row.department
       form.position = row.post
@@ -122,22 +125,27 @@
 
   const handleSubmit = () => {
     loading.value = true
-    formRef.value?.validate(async (errors: Record<string, ValidatedError> | undefined) => {
-      loading.value = false
-      if (!errors) {
-        const res = await userStore.addData({
-          userId: Math.random(10) * 10,
-          userName: form.name,
-          post: form.position,
-          ...form,
-        })
-        if (res.code === 200) {
-          handleCancel()
-          emit('done')
-          message.success(t('message.operationSuccessful'))
+    formRef.value
+      ?.validate(async (errors: Record<string, ValidatedError> | undefined) => {
+        if (!errors) {
+          const res = await userStore.addData(
+            {
+              userName: form.name,
+              post: form.position,
+              ...form,
+            },
+            isEdit.value
+          )
+          if (res.code === 200) {
+            handleCancel()
+            emit('done')
+            message.success(t('message.operationSuccessful'))
+          }
         }
-      }
-    })
+      })
+      .finally(() => {
+        loading.value = false
+      })
   }
 
   const handleCancel = () => {

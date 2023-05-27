@@ -21,7 +21,9 @@ const app = createApp(App)
 app.use(ArcoVue, {})
 app.use(ArcoVueIcon)
 app.use(Particles)
-
+window.onload = () => {
+  console.log('onload')
+}
 app.use(router)
 app.use(store)
 app.use(i18n)

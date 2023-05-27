@@ -69,5 +69,6 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     'vue/attribute-hyphenation': 0,
     'no-async-promise-executor': 0,
+    'import/prefer-default-export': 0,
   },
 }

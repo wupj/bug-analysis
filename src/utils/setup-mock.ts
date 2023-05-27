@@ -1,8 +1,10 @@
 import isNil from 'lodash/isNil'
 import isNumber from 'lodash/isNumber'
-import forEach from 'lodash/forEach'
+import map from 'lodash/map'
 import filter from 'lodash/filter'
 import localforage from 'localforage'
+import dayjs from 'dayjs'
+import { toFixed } from '@/utils/index'
 
 import debug from './env'
 
@@ -104,7 +106,8 @@ export const clearLocalData = () => {
 export const addLocalData = async (key: string, field: string, value: []) => {
   const $data = await getLocalData(key)
   $data.unshift({
-    [field]: Math.random() * 1000,
+    [field]: toFixed(Math.random() * 1000),
+    createTime: dayjs().valueOf(),
     ...value,
   })
   setLocalData(key, $data)
@@ -124,13 +127,14 @@ export const editLocalData = async (
   value: any
 ) => {
   const $data = await getLocalData(key)
-  forEach($data, (item: any) => {
+  const dealData = map($data, (item: any) => {
     let $item = item
     if (item[field] === fieldValue) {
-      $item = { ...value }
+      $item = { ...$item, ...value, updateTime: dayjs().valueOf() }
     }
+    return $item
   })
-  setLocalData(key, $data)
+  setLocalData(key, dealData)
 }
 
 /**
