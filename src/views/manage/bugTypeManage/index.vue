@@ -4,7 +4,7 @@
       <a-col :span="24" class="padding-content">
         <Search
           :searchValue="searchText"
-          :placeholder="$t('memberManage.enterName')"
+          :placeholder="$t('bugTypeManage.enterName')"
           @search="handleSearch"
           @press-enter.self="handleEenter"
       /></a-col>
@@ -64,10 +64,10 @@
     },
     {
       title: t('bugTypeManage.CreateTime'),
-      dataIndex: 'CreateTime',
+      dataIndex: 'createTime',
       width: '40%',
       render: ({ record }) => {
-        return record?.CreateTime && dayjs(record.CreateTime).format('YYYY-MM-DD HH:mm:ss')
+        return record?.createTime && dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss')
       },
     },
     {

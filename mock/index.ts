@@ -3,6 +3,7 @@ import Mock from 'mockjs'
 import './user'
 import './manage/memberManage'
 import './manage/bugTypeManage'
+import './manage/bugManage'
 import { clearLocalData, setLocalData } from '@/utils/setup-mock'
 
 const datas = import.meta.globEager('./data/*.ts')

@@ -22,7 +22,7 @@
           @page-size-change="pageSizeChange"
         >
           <template #leftButton
-            ><a-button type="primary" @click="clickAdd">{{ $t('global.add') }}</a-button
+            ><a-button type="primary" @click="clickAdd(null)">{{ $t('global.add') }}</a-button
             ><a-button
               class="ml8"
               type="primary"

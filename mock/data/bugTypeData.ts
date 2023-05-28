@@ -7,75 +7,75 @@ const withYearTime = dayjs().subtract(1, 'year').valueOf()
 const result = Mock.mock({
   data: [
     {
-      id: '@id',
+      id: /\d{1,6}/,
       name: '新需求Bug',
-      CreateTime: Mock.Random.integer(withYearTime, nowTime),
+      createTime: Mock.Random.integer(withYearTime, nowTime),
       children: [
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '新功能Bug',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '自测不充分',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '需求缺陷',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '兼容性Bug',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
       ],
     },
     {
-      id: '@id',
+      id: /\d{1,6}/,
       name: '历史Bug',
-      CreateTime: Mock.Random.integer(withYearTime, nowTime),
+      createTime: Mock.Random.integer(withYearTime, nowTime),
       children: [
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '历史功能Bug',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '遗留Bug',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
       ],
     },
     {
-      id: '@id',
+      id: /\d{1,6}/,
       name: '优化Bug',
-      CreateTime: Mock.Random.integer(withYearTime, nowTime),
+      createTime: Mock.Random.integer(withYearTime, nowTime),
       children: [
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '功能优化',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
         {
-          id: '@id',
+          id: /\d{1,6}/,
           name: '样式优化',
-          CreateTime: Mock.Random.integer(withYearTime, nowTime),
+          createTime: Mock.Random.integer(withYearTime, nowTime),
         },
       ],
     },
     {
-      id: '@id',
+      id: /\d{1,6}/,
       name: '设计如此',
-      CreateTime: Mock.Random.integer(withYearTime, nowTime),
+      createTime: Mock.Random.integer(withYearTime, nowTime),
     },
     {
-      id: '@id',
+      id: /\d{1,6}/,
       name: '外部原因',
-      CreateTime: Mock.Random.integer(withYearTime, nowTime),
+      createTime: Mock.Random.integer(withYearTime, nowTime),
     },
   ],
 })

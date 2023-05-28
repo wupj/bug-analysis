@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getBugTypeList } from '@/api/manage/bugTypeManage'
+import { getBugList } from '@/api/manage/bugManage'
 import useLoading from '@/hooks/loading'
 import { tableSorter, tablePage, tablePageSize, Pagination } from '@/types/global'
 
@@ -17,7 +17,7 @@ export interface stateProps {
   total: number
 }
 
-const useBugTypeStore = defineStore('bugTypeMange', {
+const useBugStore = defineStore('bugMange', {
   state: (): stateProps => ({
     searchText: '',
     loading,
@@ -73,7 +73,7 @@ const useBugTypeStore = defineStore('bugTypeMange', {
         pageSize,
       }
       // @ts-ignore
-      const { data = [], code } = await getBugTypeList(queryParams)
+      const { data = [], code } = await getBugList(queryParams)
       if (code === 200) {
         this.tableData = data.result
         this.total = data.total
@@ -84,4 +84,4 @@ const useBugTypeStore = defineStore('bugTypeMange', {
   },
 })
 
-export default useBugTypeStore
+export default useBugStore

@@ -113,7 +113,7 @@
   const triggerBtn = ref()
 
   const handleLogout = () => {
-    Message.success(t('navbar.logoutSucceed'))
+    // Message.success(t('navbar.logoutSucceed'))
     router.push({
       name: 'login',
     })
