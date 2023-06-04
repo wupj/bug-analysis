@@ -1,6 +1,6 @@
 import isNil from 'lodash/isNil'
 
-const constant = {
+const constant: any = {
   bugLevel: [
     {
       key: 'P0',
@@ -48,9 +48,17 @@ const constant = {
  * @param  {String}   type     类型
  * @param  {String}   value    值
  */
-export const getConstantKey = (type, value) => {
+export const getConstantKey = (type: string, value: number) => {
   if (isNil(type)) return null
-  return constant[type].find((o) => o.value === value)?.key || ''
+  return constant[type].find((o: any) => o.value === value)?.key || ''
+}
+
+/**
+ * 获取constant枚举
+ * @param  {String}   key
+ */
+export const getConstant = (key: string) => {
+  return constant[key] || []
 }
 
 export default constant

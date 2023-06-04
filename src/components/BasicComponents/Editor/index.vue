@@ -3,14 +3,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, watch, defineExpose, onMounted, onUnmounted } from 'vue'
   import useLocale from '@/hooks/locale'
   import Editor from '@toast-ui/editor'
+  import '@toast-ui/editor/dist/i18n/zh-cn'
   import '@toast-ui/editor/dist/toastui-editor.css'
 
   const { currentLocale } = useLocale()
   const editorRef = ref()
-  const editor = ref<any>(null)
+  let editor: any = null
 
   const props = defineProps({
     /**
@@ -49,8 +50,6 @@
     },
   })
 
-  const emit = defineEmits(['update:modelValue'])
-
   const editorEvents = [
     'load',
     'change',
@@ -63,32 +62,65 @@
     'beforeConvertWysiwygToMarkdown',
   ]
 
-  const eventOptions = {}
+  const emit = defineEmits([
+    'load',
+    'change',
+    'caretChange',
+    'focus',
+    'blur',
+    'keydown',
+    'keyup',
+    'beforePreviewRender',
+    'beforeConvertWysiwygToMarkdown',
+  ])
 
-  editorEvents.forEach((event) => {
-    eventOptions[event] = (...args) => {
+  const eventOptions: any = {}
+
+  editorEvents.forEach((event: string) => {
+    eventOptions[event] = (...args: any) => {
       emit(event, ...args)
     }
   })
 
+  watch(
+    () => props.editorValue,
+    (newValue) => {
+      editor?.setMarkdown(newValue)
+    }
+  )
+
+  const invoke = (methodName: string, ...args: any) => {
+    let result = null
+    if (editor[methodName]) {
+      result = editor[methodName](...args)
+    }
+    return result
+  }
+
   onMounted(() => {
-    editor.value = new Editor({
+    editor = new Editor({
       ...props.options,
       el: editorRef.value,
       initialValue: props.editorValue,
       initialEditType: props.initialEditType,
       previewStyle: props.previewStyle,
       height: props.height,
-      language: currentLocale,
+      language: currentLocale.value,
       events: eventOptions,
     })
   })
 
   onUnmounted(() => {
     editorEvents.forEach((event) => {
-      editor.value.off(event)
+      editor?.off(event)
     })
-    editor.value.destroy()
+    editor?.destroy()
+  })
+
+  defineExpose({
+    editorRef,
+    editor,
+    invoke,
   })
 </script>
 

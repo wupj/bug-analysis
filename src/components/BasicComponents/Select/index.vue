@@ -6,7 +6,7 @@
       :value="item[fieldNames.value]"
       @click="handleSelect(item)"
     >
-      {{ item[fieldNames.label] }}
+      {{ useI18n ? $t(item[fieldNames.label]) : item[fieldNames.label] }}
     </a-option>
     <slot name="footer"></slot>
   </a-select>
@@ -69,6 +69,13 @@
      */
     selectStyle: {
       type: Object,
+    },
+    /**
+     * 是否i18n
+     */
+    useI18n: {
+      type: Boolean,
+      default: false,
     },
   })
 

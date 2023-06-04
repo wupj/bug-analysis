@@ -5,7 +5,7 @@
     </div>
     <div class="right-button">
       <slot name="rightButton" />
-      <Export type="table" :tableColumns="tableColumns" :tableData="tableData" />
+      <Export v-if="showExport" type="table" :tableColumns="tableColumns" :tableData="tableData" />
     </div>
   </div>
   <a-table
@@ -85,6 +85,13 @@
      */
     pagination: {
       type: [Boolean, Object],
+    },
+    /**
+     * 是否显示下载
+     */
+    showExport: {
+      type: Boolean,
+      default: true,
     },
   })
 

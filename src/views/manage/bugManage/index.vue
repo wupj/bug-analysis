@@ -35,6 +35,7 @@
         </Table>
       </a-col>
     </a-row>
+    <Add ref="addRef" />
   </div>
 </template>
 
@@ -46,13 +47,15 @@
   import { useBugStore } from '@/store'
   import { tableSorter, tablePage, tablePageSize } from '@/types/global'
   import { getConstantKey } from '@/utils/constant'
+  import Add from './add.vue'
 
   const { t } = useI18n()
+  const addRef = ref<null>(null)
 
-  const bugTypeStore = useBugStore()
-  bugTypeStore.$reset()
+  const bugStore = useBugStore()
+  bugStore.$reset()
 
-  const { searchText, loading, tableData, pagination } = storeToRefs(bugTypeStore)
+  const { searchText, loading, tableData, pagination } = storeToRefs(bugStore)
 
   const levelColor = ['#f53f3f', '#ff5722', '#ff7d00', '#ffb400']
   const stateColor = ['#7816ff', '#165dff', '#b71de8', '#0fc6c2', '#00b42a']
@@ -118,14 +121,16 @@
   ])
 
   const handleSearch = (value = '') => {
-    bugTypeStore.setSearchText(value)
+    bugStore.setSearchText(value)
   }
 
-  const handleEenter = (Event) => {
+  const handleEenter = (Event: any) => {
     handleSearch(Event?.currentTarget?.value)
   }
 
-  const clickAdd = (row: unknown) => {}
+  const clickAdd = (row: unknown) => {
+    addRef.value?.handleOpen(row)
+  }
 
   const clickDelete = () => {}
 
@@ -136,18 +141,18 @@
   }
 
   const sorterChange = (params: tableSorter) => {
-    bugTypeStore.sorterChange(params)
+    bugStore.sorterChange(params)
   }
 
   const pageChange = (params: tablePage) => {
-    bugTypeStore.pageChange(params)
+    bugStore.pageChange(params)
   }
 
   const pageSizeChange = (params: tablePageSize) => {
-    bugTypeStore.pageSizeChange(params)
+    bugStore.pageSizeChange(params)
   }
   onBeforeMount(() => {
-    bugTypeStore.getTableData()
+    bugStore.getTableData()
   })
 </script>
 
